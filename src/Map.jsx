@@ -93,7 +93,7 @@ const darkModeStyles = [
 ]
 
 const Map = (props) => {
-    const { data=[] } = props
+    const { data=[], loading } = props
     const [centerCoords, setCenterCoords] = useState(US_view.center)
     const [zoomLevel, setZoomLevel] = useState(US_view.zoom)
     const [darkMode, setDarkMode] = useState(true)
@@ -106,6 +106,7 @@ const Map = (props) => {
             key={`marker-${i}`}
             onClick={() => console.log(fire)}
             zoom={zoomLevel}
+            loading={loading}
         />
     })
   
@@ -124,18 +125,18 @@ const Map = (props) => {
     return (
       <div id='map'>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyCgxxJFtDClpWPNIxHLJABgkDrL8YrXgbw' }}
+          bootstrapURLKeys={{ key: '******' }}
           defaultCenter={centerCoords}
           defaultZoom={zoomLevel}
           onBoundsChange={onBoundsChange}
-          options={{ styles: darkMode ? darkModeStyles : {} }}
+          options={{ styles: darkMode ? darkModeStyles : {}, disableDefaultUI: true }}
         >
             {markers}
         </GoogleMapReact>
 
         <button
           id='theme-toggler'
-          className={darkMode ? 'dark' : 'light'}
+          className={(darkMode ? 'dark' : 'light') + ' ' + (!loading && 'ready')}
           onClick={() => setDarkMode(!darkMode)}
         >
           Switch to {darkMode ? 'Light' : 'Dark'}

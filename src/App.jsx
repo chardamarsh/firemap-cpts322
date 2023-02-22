@@ -2,13 +2,7 @@ import { useState, useEffect } from 'react'
 import { createGlobalStyle } from 'styled-components'
 
 import Map from './Map'
-import Load from './Load'
-
-const delay = () => {
-  let thing = Math.random()
-  alert(thing)
-  return thing
-}
+import Loading from './Loading'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -43,10 +37,14 @@ const GlobalStyles = createGlobalStyle`
     position: absolute;
     top: 10px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(0);
     z-index: 100;
     transition: all .5s ease;
     opacity: .5;
+
+    &.ready {
+      transform: translateX(-50%) scale(1);
+    }
 
     &:hover {
       opacity: 1;
@@ -93,8 +91,8 @@ function App() {
 
   return (<div>
     <GlobalStyles />
-    <Map data={fireData} />
-    <Load loading={loading} />
+    <Map data={fireData} loading={loading} />
+    <Loading loading={loading} />
   </div>)
 }
 

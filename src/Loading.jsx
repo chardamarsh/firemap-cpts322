@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import Flame from './Flame'
+
 // An overlay that dims the map and indicates the fire data is being fetched
 const LoadingContainer = styled.div`
     width: 100vw;
@@ -21,19 +23,27 @@ const LoadingContainer = styled.div`
         transition: all 1s ease;
         filter: ${props => !props.loading && 'blur(10px)'};
         opacity: ${props => props.loading ? 1 : 0};
+
+        p {
+            margin-top: 10px;
+            font-style: italic;
+            font-weight: 100;
+            transition: transform .5s ease;
+            transform: ${props => props.loading ? 'scaleY(1)' : 'scaleY(0)'};
+        }
     }
 `
 
-const Load = ({ loading }) => {
+const Loading = ({ loading }) => {
 
     return (
         <LoadingContainer loading={loading}>
             <div id='loading-content'>
-                <h1>Hold up for a sec</h1>
-                <p>Let us get some data</p>
+                <Flame burning={loading} />
+                <p>Fetching wildfire data from NASA...</p>
             </div>
         </LoadingContainer>
     )
 }
 
-export default Load
+export default Loading
