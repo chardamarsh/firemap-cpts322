@@ -24,11 +24,43 @@ const GlobalStyles = createGlobalStyle`
     overflow: hidden;
   }
 
+  button {
+    outline: none;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 99px;
+    cursor: pointer;
+  }
+
   #map {
     width: 100vw;
     height: 100vh;
     position: relative;
     background-color: pink;
+  }
+
+  #theme-toggler {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    transition: all .5s ease;
+    opacity: .5;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &.dark {
+      background-color: #fff;
+      color: #000;
+    }
+
+    &.light {
+      background-color: #000;
+      color: #fff;
+    }
   }
 
   // this animation is applied to each fire marker
