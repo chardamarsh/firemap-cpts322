@@ -5,6 +5,9 @@ import Map from './Map'
 import Loading from './Loading'
 import Sidebar from './Sidebar'
 
+const DEBUGGING = true;
+// cache 1 or two points, skip the fetching and loading animation
+
 const GlobalStyles = createGlobalStyle`
   * {
     margin: 0;
@@ -36,28 +39,28 @@ const GlobalStyles = createGlobalStyle`
 
   .toggle {
     background: #f7786588;
-    width: 50px;
     padding: 4px;
     border-radius: 99px;
     position: relative;
-    height: 23px;
+    width: 50px;
+    height: 22px;
 
-    // for simplicity, we'll just hardcode the position of the sliding inner ball
+    // for simplicity, we'll just hardcode the dimensions of the toggler and the position of the inner sliding ball
 
     &.on {
       background: #62ea9f88;
 
       .toggle-ball {
-        left: 100%;
-        transform: translateX(calc(-100% - 4px));
+        left: 31px;
+        // transform: translateX(calc(-100% - 4px));
       }
     }
 
     .toggle-ball {
       position: absolute;
       transition: all 0.5s ease;
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       border-radius: 100%;
       background: white;
       left: 4px;
@@ -173,7 +176,7 @@ const GlobalStyles = createGlobalStyle`
 
 function App() {
   const [fireData, setFireData] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [darkMode, setDarkMode] = useState(true)
 
   useEffect(() => {
@@ -181,6 +184,40 @@ function App() {
   }, [])
 
   const fetchFireData = async () => {
+    if (DEBUGGING) {
+      setFireData([
+        {
+          "id": "EONET_5922",
+          "title": "Cougar Peak Fire",
+          "description": "",
+          "link": "https://eonet.gsfc.nasa.gov/api/v2.1/events/EONET_5922",
+          "categories": [
+              {
+                  "id": 8,
+                  "title": "Wildfires"
+              }
+          ],
+          "sources": [
+              {
+                  "id": "InciWeb",
+                  "url": "http://inciweb.nwcg.gov/incident/7835/"
+              }
+          ],
+          "geometries": [
+              {
+                  "date": "2021-09-07T13:45:00Z",
+                  "type": "Point",
+                  "coordinates": [
+                      -120.613,
+                      42.277
+                  ]
+              }
+          ]
+        }
+      ])
+      return
+    }
+
     setLoading(true)
     const result = await fetch('https://eonet.gsfc.nasa.gov/api/v2.1/events')
     const { events } = await result.json()

@@ -132,17 +132,13 @@ const Map = (props) => {
         />
     })
   
-    // might wanna debounce this for constly animations/computations
+    // might wanna debounce this for costly animations/computations
     const onBoundsChange = (center, zoom, bounds, margin) => {
       console.log(`now centered at ${center[0]}, ${center[1]}\n`)
       console.log(`zoom level: ${zoom}`)
       setCenterCoords(center)
       setZoomLevel(zoom)
     }
-
-    useEffect(() => {
-        console.log('the dater', data)
-    }, [data])
   
     return (
       <div id='map'>
