@@ -114,10 +114,9 @@ const getWeatherData = async (lat, lng) => {
 }
 
 const Map = (props) => {
-    const { data=[], loading } = props
+    const { data=[], loading, darkMode } = props
     const [centerCoords, setCenterCoords] = useState(US_view.center)
     const [zoomLevel, setZoomLevel] = useState(US_view.zoom)
-    const [darkMode, setDarkMode] = useState(true)
 
     const markers = data.map((fire, i) => {
         const [lng, lat] = fire.geometries[0].coordinates
@@ -148,7 +147,7 @@ const Map = (props) => {
     return (
       <div id='map'>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyAyesbQMyKVVbBgKVi2g6VX7mop2z96jBo' }} //This is the API key provided by the google-maps-react page. Change as needed
+          bootstrapURLKeys={{ key: 'AIzaSyCgxxJFtDClpWPNIxHLJABgkDrL8YrXgbw' }} //This is the API key provided by the google-maps-react page. Change as needed
           defaultCenter={centerCoords}
           defaultZoom={zoomLevel}
           onBoundsChange={onBoundsChange}
@@ -156,15 +155,6 @@ const Map = (props) => {
         >
             {markers}
         </GoogleMapReact>
-
-        <button
-          id='theme-toggler'
-          className={(darkMode ? 'dark' : 'light') + ' ' + (!loading && 'ready')}
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          Switch to {darkMode ? 'Light' : 'Dark'}
-        </button>
-
       </div>
     )
   }
