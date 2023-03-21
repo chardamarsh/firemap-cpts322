@@ -105,7 +105,9 @@ const getWeatherData = async (lat, lng) => {
 
 
   const raw_weather_data = await fetch(info["properties"]["forecast"]);
-  weather_info["forecast"] = await raw_weather_data.json();
+  let temp = {};
+  temp = await raw_weather_data.json();
+  weather_info["forecast"] = temp["properties"]["periods"]
 
   return weather_info;
 
