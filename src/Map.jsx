@@ -92,6 +92,25 @@ const darkModeStyles = [
   },
 ]
 
+const getWeatherData = async (lat, lng) => {
+
+  let weather_api_link = "https://api.weather.gov/points/" + lat.toString() + "," + lng.toString();
+  const raw_data = await fetch(weather_api_link);
+  const info = await raw_data.json();
+  let weather_info = {};
+
+  //nearest city information
+  weather_info["city"] = info["properties"]["relativeLocation"]["properties"]["city"];
+  weather_info["state"] = info["properties"]["relativeLocation"]["properties"]["state"];
+
+
+  const raw_weather_data = await fetch(info["properties"]["forecast"]);
+  weather_info["forecast"] = await raw_weather_data.json();
+
+  return weather_info;
+
+}
+
 const Map = (props) => {
     const { data=[], loading } = props
     const [centerCoords, setCenterCoords] = useState(US_view.center)
@@ -104,7 +123,9 @@ const Map = (props) => {
             lat={lat}
             lng={lng}
             key={`marker-${i}`}
-            onClick={() => console.log(fire)}
+            onClick={() => {console.log(fire);
+              console.log(getWeatherData(lat, lng)); //Placed here for now just to test out getWeatherData()
+            }}
             zoom={zoomLevel}
             loading={loading}
         />
@@ -125,7 +146,7 @@ const Map = (props) => {
     return (
       <div id='map'>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: '******' }}
+          bootstrapURLKeys={{ key: 'AIzaSyAyesbQMyKVVbBgKVi2g6VX7mop2z96jBo' }} //This is the API key provided by the google-maps-react page. Change as needed
           defaultCenter={centerCoords}
           defaultZoom={zoomLevel}
           onBoundsChange={onBoundsChange}
