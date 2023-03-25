@@ -119,12 +119,13 @@ const Map = (props) => {
     const [zoomLevel, setZoomLevel] = useState(US_view.zoom)
 
     const markers = data.map((fire, i) => {
-        const [lng, lat] = fire.geometries[0].coordinates
+        const lng = fire["geometry"]["x"]
+        const lat = fire["geometry"]["y"]
         return <FireMarker
             lat={lat}
             lng={lng}
             key={`marker-${i}`}
-            onClick={() => {console.log(fire);
+            onClick={() => {console.log(fire);      // contains all of the fire-specific information
               console.log(getWeatherData(lat, lng)); //Placed here for now just to test out getWeatherData()
             }}
             zoom={zoomLevel}
