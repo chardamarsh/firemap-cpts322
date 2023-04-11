@@ -5,10 +5,19 @@ import FireMarker from './FireMarker'
 
 const US_view = {
     center: {
-      lat: 42.87582239977556,
-      lng: -98.61874705496282
+      lat: 38.64244504874176,
+      lng: -96.84870757327883
     },
-    zoom: 4
+    zoom: 5,
+    bounds: {
+      nw: {   //NorthWest
+          lat: 49.3457868,
+          lng: -124.7844079
+      },
+      se: {   //SouthEast
+          lat: 24.7433195,
+          lng: -66.9513812
+      }}
 }
 
 const darkModeStyles = [
@@ -132,15 +141,29 @@ const Map = (props) => {
             loading={loading}
         />
     })
+    
   
     // might wanna debounce this for costly animations/computations
     const onBoundsChange = (center, zoom, bounds, margin) => {
       console.log(`now centered at ${center[0]}, ${center[1]}\n`)
       console.log(`zoom level: ${zoom}`)
+      console.log(`zoom level: ${US_view.bounds.nw.lng}`)  //TODO: Locking this into only the US
+      if (center[1] < US_view.bounds.nw.lng) {
+          center[1] = US_view.bounds.nw.lng;
+      }
+      if (center[1] > US_view.bounds.se.lng) {
+          center[1] = US_view.bounds.se.lng;
+      }
+      if (center[0] < US_view.bounds.se.lat) {
+          center[0] = US_view.bounds.se.lat;
+      }
+      if (center[0] > US_view.bounds.nw.lat) {
+          center[0] = US_view.bounds.nw.lat;
+      }
       setCenterCoords(center)
       setZoomLevel(zoom)
     }
-  
+    
     return (
       <div id='map'>
         <GoogleMapReact
@@ -149,6 +172,7 @@ const Map = (props) => {
           defaultZoom={zoomLevel}
           onBoundsChange={onBoundsChange}
           options={{ styles: darkMode ? darkModeStyles : {}, disableDefaultUI: true }}
+          
         >
             {markers}
         </GoogleMapReact>
