@@ -149,19 +149,21 @@ const Map = (props) => {
       console.log(`zoom level: ${zoom}`)
       console.log(`zoom level: ${US_view.bounds.nw.lng}`)  //TODO: Locking this into only the US
       if (center[1] < US_view.bounds.nw.lng) {
-          center[1] = US_view.bounds.nw.lng;
+          // center[1] = US_view.bounds.nw.lng;
+          setCenterCoords([center[0], US_view.bounds.nw.lng])
       }
-      if (center[1] > US_view.bounds.se.lng) {
-          center[1] = US_view.bounds.se.lng;
+      else if (center[1] > US_view.bounds.se.lng) {
+        setCenterCoords([center[0], US_view.bounds.se.lng])
       }
-      if (center[0] < US_view.bounds.se.lat) {
-          center[0] = US_view.bounds.se.lat;
+      else if (center[0] < US_view.bounds.se.lat) {
+        setCenterCoords([US_view.bounds.se.lat, center[1]])
       }
-      if (center[0] > US_view.bounds.nw.lat) {
-          center[0] = US_view.bounds.nw.lat;
+      else if (center[0] > US_view.bounds.nw.lat) {
+        setCenterCoords([US_view.bounds.nw.lat, center[1]])
       }
-      setCenterCoords(center)
-      setZoomLevel(zoom)
+      else
+        setCenterCoords(center)
+        setZoomLevel(zoom)
     }
     
     return (
