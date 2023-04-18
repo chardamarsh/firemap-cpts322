@@ -20,12 +20,13 @@ const Sidebar = (props) => {
           <img src={require('./img/close.png')} className={`close-sidebar ${open && 'open'}`} onClick={() => setOpen(false)} />
         </div>
         <div className='content'>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '-65px' }}>
           <p style={{ marginRight: 20 }}>Dark mode</p>
           <Toggle on={darkMode} toggle={() => setDarkMode(!darkMode)} />
         </div>
         {/*NOTE TO TEAM MEMBERS: This is just a proof-of-concept of sorts, feel free to style/add to this as you please*/}
         <div>
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '30px', fontSize: '20px'}}>
           {
             'attributes' in selectedFireData ? // check that the API info went through
             (
@@ -34,8 +35,10 @@ const Sidebar = (props) => {
               </>
             ) : null
           }
+          </div>
         </div>
         <div>
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px'}}>
           {
             'forecast' in selectedWeatherData ? // check that the API info went through
             (
@@ -44,6 +47,7 @@ const Sidebar = (props) => {
               </>
             ) : null
           }
+          </div>
         </div>
         
         </div>
