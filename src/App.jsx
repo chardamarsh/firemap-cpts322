@@ -178,6 +178,8 @@ function App() {
   const [fireData, setFireData] = useState([])
   const [loading, setLoading] = useState(false)
   const [darkMode, setDarkMode] = useState(true)
+  const [selectedFireData, setSelectedFireData] = useState({})
+  const [selectedWeatherData, setSelectedWeatherData] = useState({})
 
   useEffect(() => {
     fetchFireData()
@@ -201,7 +203,7 @@ function App() {
             "FireCauseGeneral":null,
             "FireCauseSpecific":null,
             "FireCode":null,
-            "FireDiscoveryDateTime":1672759490000,
+            "FireDiscoveryDateTime":1672759490000, // Note: this appears to be in Unix Epoch Time, in Miliseconds.
             "FireMgmtComplexity":null,
             "IncidentName":"Potato Gulch RX",
             "IncidentShortDescription":null,
@@ -261,8 +263,8 @@ function App() {
 
   return (<div>
     <GlobalStyles />
-    <Map darkMode={darkMode} data={fireData} loading={loading} />
-    <Sidebar darkMode={darkMode} setDarkMode={bool => setDarkMode(bool)} />
+    <Map darkMode={darkMode} data={fireData} loading={loading} setSelectedFireData={setSelectedFireData} setSelectedWeatherData={setSelectedWeatherData}/>
+    <Sidebar darkMode={darkMode} setDarkMode={bool => setDarkMode(bool)} selectedFireData={selectedFireData} selectedWeatherData={selectedWeatherData} />
     <Loading loading={loading} />
   </div>)
 }

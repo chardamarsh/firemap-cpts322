@@ -101,31 +101,63 @@ const darkModeStyles = [
   },
 ]
 
-const getWeatherData = async (lat, lng) => {
 
-  let weather_api_link = "https://api.weather.gov/points/" + lat.toString() + "," + lng.toString();
-  const raw_data = await fetch(weather_api_link);
-  const info = await raw_data.json();
-  let weather_info = {};
-
-  //nearest city information
-  weather_info["city"] = info["properties"]["relativeLocation"]["properties"]["city"];
-  weather_info["state"] = info["properties"]["relativeLocation"]["properties"]["state"];
-
-
-  const raw_weather_data = await fetch(info["properties"]["forecast"]);
-  let temp = {};
-  temp = await raw_weather_data.json();
-  weather_info["forecast"] = temp["properties"]["periods"]
-
-  return weather_info;
-
-}
 
 const Map = (props) => {
-    const { data=[], loading, darkMode } = props
+    const { data=[], loading, darkMode, setSelectedFireData, setSelectedWeatherData } = props
     const [centerCoords, setCenterCoords] = useState(US_view.center)
     const [zoomLevel, setZoomLevel] = useState(US_view.zoom)
+    //const [selectedFireData, setSelectedFireData] = useState({})
+    //const [selectedWeatherData, setSelectedWeatherData] = useState({})
+
+    
+    const MAX_RETRIES = 5; // maximum number of retries
+    const RETRY_INTERVAL = 1000; // interval between retries (in milliseconds)
+    
+    const getWeatherData = async (lat, lng) => {
+      let retryCount = 0;
+      let retryCount2 = 0;
+      while (retryCount < MAX_RETRIES) {
+        try {
+          let weather_api_link = "https://api.weather.gov/points/" + lat.toString() + "," + lng.toString();
+          let raw_data = await fetch(weather_api_link);
+          if (raw_data.ok) {
+            while(retryCount2 < MAX_RETRIES)
+            {
+              try {
+                let info = await raw_data.json();
+                let weather_info = {};
+                //nearest city information
+                  weather_info["city"] = info["properties"]["relativeLocation"]["properties"]["city"];
+                  weather_info["state"] = info["properties"]["relativeLocation"]["properties"]["state"];
+                  const raw_weather_data = await fetch(info["properties"]["forecast"]);
+                  if(raw_weather_data.ok) {
+                    let temp = {};
+                    temp = await raw_weather_data.json();
+                    weather_info["forecast"] = temp["properties"]["periods"];
+                    setSelectedWeatherData(weather_info);
+                    return;
+                  }
+                  else
+                  {
+                    console.log("Error: ", weather_info.status, weather_info.statusText);
+                  }
+              } catch (error) {
+                console.log("Error: error")
+              }
+              retryCount2++;
+            }
+          } else {
+            console.log("Error: ", raw_data.status, raw_data.statusText);
+          }
+        } catch (error) {
+          console.log("Error: ", error);
+        }
+        retryCount++;
+        await new Promise((resolve) => setTimeout(resolve, RETRY_INTERVAL));
+      }
+      console.log("Max retries exceeded");
+    };
 
     const markers = data.map((fire, i) => {
         const lng = fire["geometry"]["x"]
@@ -134,8 +166,8 @@ const Map = (props) => {
             lat={lat}
             lng={lng}
             key={`marker-${i}`}
-            onClick={() => {console.log(fire);      // contains all of the fire-specific information
-              console.log(getWeatherData(lat, lng)); //Placed here for now just to test out getWeatherData()
+            onClick={() => {setSelectedFireData(fire);      // contains all of the fire-specific information
+              getWeatherData(lat, lng); //Placed here for now just to test out getWeatherData()
             }}
             zoom={zoomLevel}
             loading={loading}

@@ -1,11 +1,17 @@
 import { useState } from 'react'
 
 import Toggle from './Toggle'
+import Map from './Map'
 
 const Sidebar = (props) => {
   const [open, setOpen] = useState(false)
 
-  const { darkMode, setDarkMode } = props
+  const { darkMode, setDarkMode, selectedFireData, selectedWeatherData} = props
+
+  console.log("selected fire data:")
+  console.log(selectedFireData)
+  console.log("selected weather data:")
+  console.log(selectedWeatherData)
 
   return (
     <>
@@ -18,12 +24,33 @@ const Sidebar = (props) => {
           <p style={{ marginRight: 20 }}>Dark mode</p>
           <Toggle on={darkMode} toggle={() => setDarkMode(!darkMode)} />
         </div>
-
+        {/*NOTE TO TEAM MEMBERS: This is just a proof-of-concept of sorts, feel free to style/add to this as you please*/}
+        <div>
+          {
+            'attributes' in selectedFireData ? // check that the API info went through
+            (
+              <>
+                <p>{selectedFireData["attributes"]["IncidentName"]}</p>
+              </>
+            ) : null
+          }
+        </div>
+        <div>
+          {
+            'forecast' in selectedWeatherData ? // check that the API info went through
+            (
+              <>
+                <p>{selectedWeatherData["forecast"][0]["detailedForecast"]}</p>
+              </>
+            ) : null
+          }
+        </div>
+        
         </div>
       </div>
-
       <img src={require('./img/ham.png')} className={`open-sidebar ${open && 'open'}`} onClick={() => setOpen(true)} />
     </>
+
   )
 }
 
