@@ -180,10 +180,17 @@ function App() {
   const [darkMode, setDarkMode] = useState(true)
   const [selectedFireData, setSelectedFireData] = useState({})
   const [selectedWeatherData, setSelectedWeatherData] = useState({})
+  const [open, setOpen] = useState(false);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchFireData()
   }, [])
+
+  const handleToggle = (value) => {
+    setOpen(value);
+  };
 
   const fetchFireData = async () => {
     if (DEBUGGING) {
@@ -263,8 +270,8 @@ function App() {
 
   return (<div>
     <GlobalStyles />
-    <Map darkMode={darkMode} data={fireData} loading={loading} setSelectedFireData={setSelectedFireData} setSelectedWeatherData={setSelectedWeatherData}/>
-    <Sidebar darkMode={darkMode} setDarkMode={bool => setDarkMode(bool)} selectedFireData={selectedFireData} selectedWeatherData={selectedWeatherData} />
+    <Map handleToggle={handleToggle} darkMode={darkMode} data={fireData} loading={loading} setSelectedFireData={setSelectedFireData} setSelectedWeatherData={setSelectedWeatherData}/>
+    <Sidebar open={open} setOpen={setOpen} darkMode={darkMode} setDarkMode={bool => setDarkMode(bool)} selectedFireData={selectedFireData} selectedWeatherData={selectedWeatherData} />
     <Loading loading={loading} />
   </div>)
 }

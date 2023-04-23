@@ -104,12 +104,11 @@ const darkModeStyles = [
 
 
 const Map = (props) => {
-    const { data=[], loading, darkMode, setSelectedFireData, setSelectedWeatherData } = props
+    const { data=[], loading, darkMode, setSelectedFireData, setSelectedWeatherData, handleToggle } = props
     const [centerCoords, setCenterCoords] = useState(US_view.center)
     const [zoomLevel, setZoomLevel] = useState(US_view.zoom)
     //const [selectedFireData, setSelectedFireData] = useState({})
     //const [selectedWeatherData, setSelectedWeatherData] = useState({})
-
     
     const MAX_RETRIES = 5; // maximum number of retries
     const RETRY_INTERVAL = 1000; // interval between retries (in milliseconds)
@@ -168,6 +167,7 @@ const Map = (props) => {
             key={`marker-${i}`}
             onClick={() => {setSelectedFireData(fire);      // contains all of the fire-specific information
               getWeatherData(lat, lng); //Placed here for now just to test out getWeatherData()
+              handleToggle(true);
             }}
             zoom={zoomLevel}
             loading={loading}
