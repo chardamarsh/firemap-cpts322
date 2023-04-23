@@ -3,9 +3,6 @@ import Toggle from './Toggle';
 import Map from './Map';
 
 const Sidebar = (props) => {
-  //const [open, setOpen] = useState(false);
-  const [initialLatitude, setInitialLatitude] = useState('');
-
   const { darkMode, setDarkMode, selectedFireData, selectedWeatherData, open, setOpen } = props;
 
   return (
