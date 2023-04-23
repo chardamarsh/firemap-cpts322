@@ -44,7 +44,8 @@ const Sidebar = (props) => {
               <>
                 <p>Latitude: {selectedFireData.attributes.InitialLatitude || 'N/A'}</p>
                 <p>Longitude: {selectedFireData.attributes.InitialLongitude || 'N/A'}</p>
-                <p>Incident Size: {selectedFireData.attributes.IncidentSize || 'N/A'}</p>
+                <p>Incident Size: {selectedFireData.attributes.IncidentSize || 'N/A'} Acres</p>
+                <p>Incident Type: {selectedFireData.attributes.IncidentTypeCategory=='WF' ? ('Wildfire'): selectedFireData.attributes.IncidentTypeCategory=='RX' ? ('Prescribed Fire') : 'N/A'}</p>
                 <p>Fire Cause: {selectedFireData.attributes.FireCause || 'N/A'}</p>
                 <p>Discovery Date: {selectedFireData.attributes.FireDiscoveryDateTime ? new Date(parseInt(selectedFireData.attributes.FireDiscoveryDateTime)).toLocaleString() : 'N/A'}</p>
                 <p>Dispatch Center ID: {selectedFireData.attributes.DispatchCenterID || 'N/A'}</p>
