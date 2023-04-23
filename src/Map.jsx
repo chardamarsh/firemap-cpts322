@@ -112,6 +112,16 @@ const Map = (props) => {
     
     const MAX_RETRIES = 5; // maximum number of retries
     const RETRY_INTERVAL = 1000; // interval between retries (in milliseconds)
+
+        
+    const [selectedMarkerCoords, setSelectedMarkerCoords] = useState(null)
+
+    useEffect(() => {
+      if (selectedMarkerCoords) {
+        setCenterCoords(selectedMarkerCoords);
+      }
+    }, [selectedMarkerCoords]);
+
     
     const getWeatherData = async (lat, lng) => {
       let retryCount = 0;
@@ -168,6 +178,7 @@ const Map = (props) => {
             onClick={() => {setSelectedFireData(fire);      // contains all of the fire-specific information
               getWeatherData(lat, lng); //Placed here for now just to test out getWeatherData()
               handleToggle(true);
+              setSelectedMarkerCoords({ lat, lng });
             }}
             zoom={zoomLevel}
             loading={loading}
@@ -202,7 +213,7 @@ const Map = (props) => {
       <div id='map'>
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyCgxxJFtDClpWPNIxHLJABgkDrL8YrXgbw' }} //This is the API key provided by the google-maps-react page. Change as needed
-          defaultCenter={centerCoords}
+          center={centerCoords}
           defaultZoom={zoomLevel}
           onBoundsChange={onBoundsChange}
           options={{ styles: darkMode ? darkModeStyles : {}, disableDefaultUI: true }}
