@@ -1,5 +1,5 @@
 # Firemap
-An interactive map to view wildfires across the world
+An interactive map to view wildfires in the United States.
 
 <br />
 
