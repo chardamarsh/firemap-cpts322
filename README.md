@@ -1,11 +1,12 @@
 # Firemap
-An interactive map to view wildfires in the United States.
+An interactive map to view near real-time wildfire and weather information in the United States. Created using the React Framework.
 
 <br />
 
-### NASA Wildfire Data  
-https://eonet.gsfc.nasa.gov/api/v2.1/events
-
+### NIFC Current Wildfire Data  
+https://data-nifc.opendata.arcgis.com/datasets/nifc::current-wildland-fire-incident-locations/about
+### NWS Spot Weather Forecast API
+https://api.weather.gov
 <br />
 
 ### Collaborators
