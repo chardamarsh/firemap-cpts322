@@ -108,7 +108,7 @@ const Map = (props) => {
     const [centerCoords, setCenterCoords] = useState(US_view.center)
     const [zoomLevel, setZoomLevel] = useState(US_view.zoom)
     //const [selectedFireData, setSelectedFireData] = useState({})
-    //const [selectedWeatherData, setSelectedWeatherData] = useState({})
+    //const [selectedWeatherData, setSelectedWeatherData] = useState({})z
     
     const MAX_RETRIES = 5; // maximum number of retries
     const RETRY_INTERVAL = 1000; // interval between retries (in milliseconds)
@@ -210,7 +210,7 @@ const Map = (props) => {
     }
     
     return (
-      <div id='map'>
+      <div id='map' data-testid="map-container">
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyCgxxJFtDClpWPNIxHLJABgkDrL8YrXgbw' }} //This is the API key provided by the google-maps-react page. Change as needed
           center={centerCoords}
