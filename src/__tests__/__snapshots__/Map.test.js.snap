@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toggle Dark mode toggle renders correctly 1`] = `
+<div
+  class="toggle false"
+>
+  <div
+    class="toggle-ball"
+  />
+</div>
+`;
+
+exports[`Toggle renders correctly 1`] = `
+<div
+  class="toggle false"
+>
+  <div
+    class="toggle-ball"
+  />
+</div>
+`;

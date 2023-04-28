@@ -192,7 +192,6 @@ const Map = (props) => {
       console.log(`zoom level: ${zoom}`)
       console.log(`zoom level: ${US_view.bounds.nw.lng}`)  //TODO: Locking this into only the US
       if (center[1] < US_view.bounds.nw.lng) {
-          // center[1] = US_view.bounds.nw.lng;
           setCenterCoords([center[0], US_view.bounds.nw.lng])
       }
       else if (center[1] > US_view.bounds.se.lng) {
