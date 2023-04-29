@@ -1,8 +1,11 @@
+import { useState, useEffect } from 'react';
 import Toggle from './Toggle';
+import Map from './Map';
 
 const Sidebar = (props) => {
   const { darkMode, setDarkMode, selectedFireData, selectedWeatherData, open, setOpen } = props;
 
+  
   return (
     <>
       <div id='sidebar' className={open ? 'open' : 'closed'} style={{ textAlign: 'center' }}>

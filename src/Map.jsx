@@ -3,6 +3,59 @@ import GoogleMapReact from 'google-map-react'
 
 import FireMarker from './FireMarker'
 
+const stateAbbreviations = [
+  { name: 'Alabama', abbreviation: 'AL' },
+  { name: 'Alaska', abbreviation: 'AK' },
+  { name: 'Arizona', abbreviation: 'AZ' },
+  { name: 'Arkansas', abbreviation: 'AR' },
+  { name: 'California', abbreviation: 'CA' },
+  { name: 'Colorado', abbreviation: 'CO' },
+  { name: 'Connecticut', abbreviation: 'CT' },
+  { name: 'Delaware', abbreviation: 'DE' },
+  { name: 'Florida', abbreviation: 'FL' },
+  { name: 'Georgia', abbreviation: 'GA' },
+  { name: 'Hawaii', abbreviation: 'HI' },
+  { name: 'Idaho', abbreviation: 'ID' },
+  { name: 'Illinois', abbreviation: 'IL' },
+  { name: 'Indiana', abbreviation: 'IN' },
+  { name: 'Iowa', abbreviation: 'IA' },
+  { name: 'Kansas', abbreviation: 'KS' },
+  { name: 'Kentucky', abbreviation: 'KY' },
+  { name: 'Louisiana', abbreviation: 'LA' },
+  { name: 'Maine', abbreviation: 'ME' },
+  { name: 'Maryland', abbreviation: 'MD' },
+  { name: 'Massachusetts', abbreviation: 'MA' },
+  { name: 'Michigan', abbreviation: 'MI' },
+  { name: 'Minnesota', abbreviation: 'MN' },
+  { name: 'Mississippi', abbreviation: 'MS' },
+  { name: 'Missouri', abbreviation: 'MO' },
+  { name: 'Montana', abbreviation: 'MT' },
+  { name: 'Nebraska', abbreviation: 'NE' },
+  { name: 'Nevada', abbreviation: 'NV' },
+  { name: 'New Hampshire', abbreviation: 'NH' },
+  { name: 'New Jersey', abbreviation: 'NJ' },
+  { name: 'New Mexico', abbreviation: 'NM' },
+  { name: 'New York', abbreviation: 'NY' },
+  { name: 'North Carolina', abbreviation: 'NC' },
+  { name: 'North Dakota', abbreviation: 'ND' },
+  { name: 'Ohio', abbreviation: 'OH' },
+  { name: 'Oklahoma', abbreviation: 'OK' },
+  { name: 'Oregon', abbreviation: 'OR' },
+  { name: 'Pennsylvania', abbreviation: 'PA' },
+  { name: 'Rhode Island', abbreviation: 'RI' },
+  { name: 'South Carolina', abbreviation: 'SC' },
+  { name: 'South Dakota', abbreviation: 'SD' },
+  { name: 'Tennessee', abbreviation: 'TN' },
+  { name: 'Texas', abbreviation: 'TX' },
+  { name: 'Utah', abbreviation: 'UT' },
+  { name: 'Vermont', abbreviation: 'VT' },
+  { name: 'Virginia', abbreviation: 'VA' },
+  { name: 'Washington', abbreviation: 'WA' },
+  { name: 'West Virginia', abbreviation: 'WV' },
+  { name: 'Wisconsin', abbreviation: 'WI' },
+  { name: 'Wyoming', abbreviation: 'WY' }
+];
+
 const US_view = {
     center: {
       lat: 38.64244504874176,
@@ -108,20 +161,66 @@ const Map = (props) => {
     const [centerCoords, setCenterCoords] = useState(US_view.center)
     const [zoomLevel, setZoomLevel] = useState(US_view.zoom)
     //const [selectedFireData, setSelectedFireData] = useState({})
-    //const [selectedWeatherData, setSelectedWeatherData] = useState({})z
-    
+    //const [selectedWeatherData, setSelectedWeatherData] = useState({})
+    const [showStateList, setShowStateList] = useState(false)
+    const [selectedState, setSelectedState] = useState(null)
+    const [selectedMarkerCoords, setSelectedMarkerCoords] = useState(null)
+      
     const MAX_RETRIES = 5; // maximum number of retries
     const RETRY_INTERVAL = 1000; // interval between retries (in milliseconds)
 
-        
-    const [selectedMarkerCoords, setSelectedMarkerCoords] = useState(null)
-
+    // Set coordinates if they change
     useEffect(() => {
       if (selectedMarkerCoords) {
         setCenterCoords(selectedMarkerCoords);
       }
     }, [selectedMarkerCoords]);
 
+     // Control state list display size (shows 10 items at most)
+    const handleShowStateList = () => {
+      setShowStateList(prevState => !prevState);
+      if (!showStateList) {
+        const stateList = document.querySelectorAll(".map-button");
+        stateList.forEach((state, index) => {
+          if (index < 10) {
+            state.style.display = "block";
+          } else {
+            state.style.display = "none";
+          }
+        });
+      }
+    }
+    
+    // Find state abbreviation
+    // POOState format is "US-state-abbreviation"
+    // Set the state
+    // Controls the state list visibility.
+    const handleSelectState = (stateName) => {
+      const selectedStateAbbr = stateAbbreviations.find(state => state.name === stateName).abbreviation;
+      console.log(selectedStateAbbr);
+      setSelectedState(selectedStateAbbr);
+      setShowStateList(false);
+    }
+
+    // State list button
+    const stateListButton = (
+      <button onClick={handleShowStateList} style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 1 }}>
+        Select a state
+      </button>
+    )
+
+    // Map each state to an li element
+    const stateList = (
+      <div className="state-list" style={{ position: "absolute", bottom: '60px', right: '12px', backgroundColor: "rgba(255, 255, 255, 0)", padding: 10, zIndex: 1, maxHeight: 200, overflowY: "scroll" }}>
+        <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+          {stateAbbreviations.map((state) => (
+            <li key={state.abbreviation} onClick={() => handleSelectState(state.name)} style={{ padding: '10px', margin: '5px 0', backgroundColor: '#f2f2f2', borderRadius: '5px', textAlign: 'center', cursor: 'pointer' }}>{state.name}</li>
+          ))}
+        </ul>
+      </div>
+    );
+    
+    
     
     const getWeatherData = async (lat, lng) => {
       let retryCount = 0;
@@ -168,22 +267,32 @@ const Map = (props) => {
       console.log("Max retries exceeded");
     };
 
-    const markers = data.map((fire, i) => {
-        const lng = fire["geometry"]["x"]
-        const lat = fire["geometry"]["y"]
-        return <FireMarker
-            lat={lat}
-            lng={lng}
-            key={`marker-${i}`}
-            onClick={() => {setSelectedFireData(fire);      // contains all of the fire-specific information
-              getWeatherData(lat, lng); //Placed here for now just to test out getWeatherData()
-              handleToggle(true);
-              setSelectedMarkerCoords({ lat, lng });
-            }}
-            zoom={zoomLevel}
-            loading={loading}
+    // If a user selects a state, return fire markers that only match the selected state abbreviation
+    const markers = data.filter(fire => {
+      if (selectedState) {
+        console.log(fire.attributes.POOState)
+        return fire.attributes.POOState === `US-${selectedState}`;
+      }
+      return true;
+    }).map((fire, i) => {
+      const lng = fire.geometry.x;
+      const lat = fire.geometry.y;
+      return (
+        <FireMarker
+          lat={lat}
+          lng={lng}
+          key={`marker-${i}`}
+          onClick={() => {
+            setSelectedFireData(fire);
+            getWeatherData(lat, lng);
+            handleToggle(true);
+            setSelectedMarkerCoords({ lat, lng });
+          }}
+          zoom={zoomLevel}
+          loading={loading}
         />
-    })
+      );
+    });
     
   
     // might wanna debounce this for costly animations/computations
@@ -215,11 +324,12 @@ const Map = (props) => {
           center={centerCoords}
           defaultZoom={zoomLevel}
           onBoundsChange={onBoundsChange}
-          options={{ styles: darkMode ? darkModeStyles : {}, disableDefaultUI: true }}
-          
+          options={{ styles: darkMode ? darkModeStyles : {}, disableDefaultUI: true }} 
         >
-            {markers}
+        {markers}
         </GoogleMapReact>
+        {showStateList && stateList}
+        {stateListButton}
       </div>
     )
   }
