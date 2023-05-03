@@ -53,4 +53,40 @@ describe('Sidebar', () => {
       expect(screen.getByText('POO Dispatch Center ID: Test POO Dispatch Center ID')).toBeInTheDocument();
       expect(screen.getByText('POO County: Test County')).toBeInTheDocument();
     });
+
+    // Test to see if sidebar closes
+    it('Closes sidebar', () => {
+      const mockSetOpen = jest.fn();
+      render(
+        <Sidebar
+          darkMode={false}
+          setDarkMode={() => {}}
+          selectedFireData={mockSelectedFireData}
+          selectedWeatherData={{}}
+          open={true}
+          setOpen={mockSetOpen}
+        />
+      );
+      const closeButton = screen.getByTestId('close-button');
+      closeButton.click();
+      expect(mockSetOpen).toHaveBeenCalled();
+    });
+
+    // Test to see if sidebar opens
+    it('Opens sidebar', () => {
+      const mockSetOpen = jest.fn();
+      render(
+        <Sidebar
+          darkMode={false}
+          setDarkMode={() => {}}
+          selectedFireData={mockSelectedFireData}
+          selectedWeatherData={{}}
+          open={false}
+          setOpen={mockSetOpen}
+        />
+      );
+      const openButton = screen.getByTestId('open-button');
+      openButton.click();
+      expect(mockSetOpen).toHaveBeenCalled();
+    });
   });

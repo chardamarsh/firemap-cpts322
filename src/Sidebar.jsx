@@ -10,7 +10,7 @@ const Sidebar = (props) => {
     <>
       <div id='sidebar' className={open ? 'open' : 'closed'} style={{ textAlign: 'center' }}>
         <div className='header'>
-          <img src={require('./img/close.png')} className={`close-sidebar ${open && 'open'}`} onClick={() => setOpen(false)} />
+          <img src={require('./img/close.png')} data-testid="close-button" className={`close-sidebar ${open && 'open'}`} onClick={() => setOpen(false)} />
         </div>
         <div className='content'>
           <div style={{ display: 'flex', alignItems: 'center', marginTop: '-65px' }}>
@@ -59,7 +59,7 @@ const Sidebar = (props) => {
           
         </div>
       </div>
-      <img src={require('./img/ham.png')} className={`open-sidebar ${open && 'open'}`} onClick={() => setOpen(true)} />
+      <img src={require('./img/ham.png')} data-testid="open-button" className={`open-sidebar ${open && 'open'}`} onClick={() => setOpen(true)} />
     </>
   );
 };
