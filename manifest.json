@@ -1,0 +1,6 @@
+{
+  "short_name": "FireMap",
+  "name": "FireMap",
+  "start_url": ".",
+  "display": "standalone"
+}
